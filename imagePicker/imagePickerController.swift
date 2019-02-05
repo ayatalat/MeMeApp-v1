@@ -1,7 +1,7 @@
 
 import UIKit
 
-class ViewController: UIViewController,UIImagePickerControllerDelegate,
+class imagePickerController: UIViewController,UIImagePickerControllerDelegate,
 UINavigationControllerDelegate,  UITextFieldDelegate{
     @IBOutlet weak var cambtn: UIBarButtonItem!
     @IBOutlet weak var toptxt: UITextField!
@@ -10,31 +10,32 @@ UINavigationControllerDelegate,  UITextFieldDelegate{
   
     @IBOutlet weak var bottemtxt: UITextField!
     @IBOutlet weak var imagePicker: UIImageView!
-   let memeTextAttributes = [
-       .strokeColor : UIColor.black,
-       .foregroundColor : UIColor.white,
-        .strokeWidth : -2.0,
-        .font : UIFont.boldSystemFont(ofSize: 18)
-        ] as [NSAttributedStringKey : Any]
-
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        toptxt.delegate = self
-        bottemtxt.delegate = self
-        toptxt.textAlignment = .center
-        bottemtxt.textAlignment = .center
-       // toptxt.defaultTextAttributes = memeTextAttributes
-      //  bottemtxt.defaultTextAttributes = strokeTextAttributes
-        // commented as if i put them i have this error Cannot assign value of type '[NSAttributedStringKey : Any]' to type '[String : Any]'
+        prepareTextField(textField: toptxt, text: "TOP")
+        prepareTextField(textField: bottemtxt, text: "BOTTEM")
+
+        if(!UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.camera)) {
+            cambtn.isEnabled = false
+        }
+        subscribeToKeyboardNotifications()
     }
     
-
-
+    func prepareTextField(textField: UITextField, text: String) {
+        let memeTextAttributes = [
+            NSAttributedStringKey.foregroundColor: UIColor.white,
+            NSAttributedStringKey.strokeWidth: -2.0,
+            NSAttributedStringKey.strokeColor : UIColor.black,
+            NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 18)] as [NSAttributedStringKey : Any]
+        
+        textField.attributedText = NSAttributedString(string: text, attributes: memeTextAttributes)
+        textField.delegate = self
+        textField.textAlignment = .center
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-         subscribeToKeyboardNotifications()
+        
         if imagePicker.image == nil {
             shareBtn.isEnabled = false
         } else {
@@ -53,14 +54,14 @@ UINavigationControllerDelegate,  UITextFieldDelegate{
     }
     
     @objc func keyboardWillShow(_ notification:Notification) {
-        view.frame.origin.y -= getKeyboardHeight(notification)
+        if(bottemtxt.isEditing) {
+            view.frame.origin.y -= getKeyboardHeight(notification)
+        }
     }
     
     @objc func keyboardWillHide(notification: Notification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            if self.view.frame.origin.y != 0 {
                 self.view.frame.origin.y += keyboardSize.height
-            }
         }
     }
     
@@ -87,7 +88,9 @@ UINavigationControllerDelegate,  UITextFieldDelegate{
         let memedImage = generateMemedImage()
         let activityController = UIActivityViewController(activityItems: [memedImage], applicationActivities: nil)
         activityController.completionWithItemsHandler = { activity, success, items, error in
-            self.save()
+            if(success){
+                self.save()
+            }
             self.dismiss(animated : true, completion: nil)
         }
         
@@ -112,27 +115,24 @@ UINavigationControllerDelegate,  UITextFieldDelegate{
     
     
     @IBAction func pickFromCam(_ sender: Any) {
-          let cam = UIImagePickerController()
-        if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.camera))
-        {
-            cam.sourceType = UIImagePickerControllerSourceType.camera
-            present(cam, animated: true, completion: nil)
-        }
-        else
-        {
-            let alert  = UIAlertController(title: "Warning", message: "You don't have camera", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            present(alert, animated: true, completion: nil)
+          pickImage(source: "camera")
+     }
+    
+
+    func pickImage(source: String) {
+        let pickerController = UIImagePickerController()
+        pickerController.delegate = self
+        if(source == "camera") {
+            pickerController.sourceType = .camera
+        }else {
+            pickerController.sourceType = .photoLibrary
         }
         
+        present(pickerController, animated: true, completion: nil)
     }
     
-  
     @IBAction func pick(_ sender: Any) {
-        let pickerController = UIImagePickerController()
-         pickerController.delegate = self
-        pickerController.sourceType = .photoLibrary
-        present(pickerController, animated: true, completion: nil)
+        pickImage(source: "photo")
     }
     
     internal func imagePickerController(_ picker: UIImagePickerController,  didFinishPickingMediaWithInfo info: [String : Any]) {
