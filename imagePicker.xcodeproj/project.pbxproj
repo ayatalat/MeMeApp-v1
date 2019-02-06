@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D936E66321FFAD080092D5D6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D936E66221FFAD080092D5D6 /* AppDelegate.swift */; };
-		D936E66521FFAD080092D5D6 /* imagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D936E66421FFAD080092D5D6 /* imagePickerController.swift */; };
+		D936E66521FFAD080092D5D6 /* ImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D936E66421FFAD080092D5D6 /* ImagePickerController.swift */; };
 		D936E66821FFAD080092D5D6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D936E66621FFAD080092D5D6 /* Main.storyboard */; };
 		D936E66A21FFAD080092D5D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D936E66921FFAD080092D5D6 /* Assets.xcassets */; };
 		D936E66D21FFAD080092D5D6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D936E66B21FFAD080092D5D6 /* LaunchScreen.storyboard */; };
@@ -18,7 +18,7 @@
 /* Begin PBXFileReference section */
 		D936E65F21FFAD080092D5D6 /* imagePicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = imagePicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D936E66221FFAD080092D5D6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		D936E66421FFAD080092D5D6 /* imagePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = imagePickerController.swift; sourceTree = "<group>"; };
+		D936E66421FFAD080092D5D6 /* ImagePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerController.swift; sourceTree = "<group>"; };
 		D936E66721FFAD080092D5D6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D936E66921FFAD080092D5D6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D936E66C21FFAD080092D5D6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -57,7 +57,7 @@
 			isa = PBXGroup;
 			children = (
 				D936E66221FFAD080092D5D6 /* AppDelegate.swift */,
-				D936E66421FFAD080092D5D6 /* imagePickerController.swift */,
+				D936E66421FFAD080092D5D6 /* ImagePickerController.swift */,
 				D936E66621FFAD080092D5D6 /* Main.storyboard */,
 				D936E66921FFAD080092D5D6 /* Assets.xcassets */,
 				D936E66B21FFAD080092D5D6 /* LaunchScreen.storyboard */,
@@ -140,7 +140,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D9EB060E2205B42B007C10B6 /* Meme.swift in Sources */,
-				D936E66521FFAD080092D5D6 /* imagePickerController.swift in Sources */,
+				D936E66521FFAD080092D5D6 /* ImagePickerController.swift in Sources */,
 				D936E66321FFAD080092D5D6 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

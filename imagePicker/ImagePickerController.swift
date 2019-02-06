@@ -1,45 +1,41 @@
 
 import UIKit
 
-class imagePickerController: UIViewController,UIImagePickerControllerDelegate,
+class ImagePickerController: UIViewController,UIImagePickerControllerDelegate,
 UINavigationControllerDelegate,  UITextFieldDelegate{
     @IBOutlet weak var cambtn: UIBarButtonItem!
     @IBOutlet weak var toptxt: UITextField!
     @IBOutlet weak var shareBtn: UIBarButtonItem!
     
-  
+    @IBOutlet weak var toolBar: UIToolbar!
+    
+    @IBOutlet weak var navBar: UIToolbar!
     @IBOutlet weak var bottemtxt: UITextField!
     @IBOutlet weak var imagePicker: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
         prepareTextField(textField: toptxt, text: "TOP")
         prepareTextField(textField: bottemtxt, text: "BOTTEM")
-
-        if(!UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.camera)) {
-            cambtn.isEnabled = false
-        }
+        cambtn.isEnabled = UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera)
         subscribeToKeyboardNotifications()
     }
     
     func prepareTextField(textField: UITextField, text: String) {
+        textField.delegate = self
+        textField.textAlignment = .center
         let memeTextAttributes = [
             NSAttributedStringKey.foregroundColor: UIColor.white,
             NSAttributedStringKey.strokeWidth: -2.0,
-            NSAttributedStringKey.strokeColor : UIColor.black,
+            NSAttributedStringKey.strokeColor : UIColor.white,
             NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 18)] as [NSAttributedStringKey : Any]
         
         textField.attributedText = NSAttributedString(string: text, attributes: memeTextAttributes)
-        textField.delegate = self
-        textField.textAlignment = .center
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         if imagePicker.image == nil {
             shareBtn.isEnabled = false
-        } else {
-            shareBtn.isEnabled = true
         }
     }
     
@@ -60,9 +56,7 @@ UINavigationControllerDelegate,  UITextFieldDelegate{
     }
     
     @objc func keyboardWillHide(notification: Notification) {
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-                self.view.frame.origin.y += keyboardSize.height
-        }
+          self.view.frame.origin.y = 0
     }
     
     func getKeyboardHeight(_ notification:Notification) -> CGFloat {
@@ -77,11 +71,15 @@ UINavigationControllerDelegate,  UITextFieldDelegate{
     }
     
     func generateMemedImage() -> UIImage {
+        
+        navBar.isHidden = true
+        toolBar.isHidden = true
         UIGraphicsBeginImageContext(self.view.frame.size)
         view.drawHierarchy(in: self.view.frame, afterScreenUpdates: true)
         let memedImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
-        
+        navBar.isHidden = false
+        toolBar.isHidden = false
         return memedImage
     }
     @IBAction func shareImage(_ sender: Any) {
@@ -115,30 +113,25 @@ UINavigationControllerDelegate,  UITextFieldDelegate{
     
     
     @IBAction func pickFromCam(_ sender: Any) {
-          pickImage(source: "camera")
+          pickImage(.camera)
      }
     
 
-    func pickImage(source: String) {
+    func pickImage(_ type: UIImagePickerControllerSourceType) {
         let pickerController = UIImagePickerController()
         pickerController.delegate = self
-        if(source == "camera") {
-            pickerController.sourceType = .camera
-        }else {
-            pickerController.sourceType = .photoLibrary
-        }
-        
+        pickerController.sourceType = type
         present(pickerController, animated: true, completion: nil)
     }
     
     @IBAction func pick(_ sender: Any) {
-        pickImage(source: "photo")
+        pickImage(.photoLibrary)
     }
     
     internal func imagePickerController(_ picker: UIImagePickerController,  didFinishPickingMediaWithInfo info: [String : Any]) {
         picker.dismiss(animated: true, completion: nil)
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-           
+           shareBtn.isEnabled = true
           imagePicker.image = image
         }
         
