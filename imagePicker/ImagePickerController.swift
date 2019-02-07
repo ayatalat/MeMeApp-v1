@@ -5,8 +5,8 @@ class ImagePickerController: UIViewController,UIImagePickerControllerDelegate,
 UINavigationControllerDelegate,  UITextFieldDelegate{
     @IBOutlet weak var cambtn: UIBarButtonItem!
     @IBOutlet weak var toptxt: UITextField!
-    @IBOutlet weak var shareBtn: UIBarButtonItem!
     
+    @IBOutlet weak var shareBtn: UIBarButtonItem!
     @IBOutlet weak var toolBar: UIToolbar!
     
     @IBOutlet weak var navBar: UIToolbar!
@@ -15,7 +15,7 @@ UINavigationControllerDelegate,  UITextFieldDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         prepareTextField(textField: toptxt, text: "TOP")
-        prepareTextField(textField: bottemtxt, text: "BOTTEM")
+        prepareTextField(textField: bottemtxt, text: "BOTTOM")
         cambtn.isEnabled = UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera)
         subscribeToKeyboardNotifications()
     }
@@ -29,14 +29,14 @@ UINavigationControllerDelegate,  UITextFieldDelegate{
             NSAttributedStringKey.strokeColor : UIColor.white,
             NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 18)] as [NSAttributedStringKey : Any]
         
-        textField.attributedText = NSAttributedString(string: text, attributes: memeTextAttributes)
+        textField.attributedText = NSAttributedString(string: text, attributes: memeTextAttributes) // styles not applied to the text field !!
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if imagePicker.image == nil {
+        if (imagePicker.image == nil) {
             shareBtn.isEnabled = false
-        }
+        }// if i remove the condition the share btn always disabled even if there is image and i don't know the reason
     }
     
     func subscribeToKeyboardNotifications() {
@@ -56,7 +56,7 @@ UINavigationControllerDelegate,  UITextFieldDelegate{
     }
     
     @objc func keyboardWillHide(notification: Notification) {
-          self.view.frame.origin.y = 0
+        self.view.frame.origin.y = 0
     }
     
     func getKeyboardHeight(_ notification:Notification) -> CGFloat {
@@ -71,17 +71,21 @@ UINavigationControllerDelegate,  UITextFieldDelegate{
     }
     
     func generateMemedImage() -> UIImage {
-        
-        navBar.isHidden = true
-        toolBar.isHidden = true
+        hideToolbars(true)
         UIGraphicsBeginImageContext(self.view.frame.size)
         view.drawHierarchy(in: self.view.frame, afterScreenUpdates: true)
         let memedImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
-        navBar.isHidden = false
-        toolBar.isHidden = false
+        hideToolbars(false)
         return memedImage
     }
+    
+    func hideToolbars(_ hide: Bool) {
+        navBar.isHidden = hide
+        toolBar.isHidden = hide
+    }
+    
+   
     @IBAction func shareImage(_ sender: Any) {
         let memedImage = generateMemedImage()
         let activityController = UIActivityViewController(activityItems: [memedImage], applicationActivities: nil)
@@ -92,20 +96,18 @@ UINavigationControllerDelegate,  UITextFieldDelegate{
             self.dismiss(animated : true, completion: nil)
         }
         
-      
-       present (activityController, animated: true, completion: nil)
+        
+        present (activityController, animated: true, completion: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
     }
     
-    
-    
     func textFieldDidBeginEditing(_ textField: UITextField) {
-         textField.text  = ""
+        textField.text  = ""
     }
- 
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false
@@ -113,10 +115,10 @@ UINavigationControllerDelegate,  UITextFieldDelegate{
     
     
     @IBAction func pickFromCam(_ sender: Any) {
-          pickImage(.camera)
-     }
+        pickImage(.camera)
+    }
     
-
+    
     func pickImage(_ type: UIImagePickerControllerSourceType) {
         let pickerController = UIImagePickerController()
         pickerController.delegate = self
@@ -131,17 +133,17 @@ UINavigationControllerDelegate,  UITextFieldDelegate{
     internal func imagePickerController(_ picker: UIImagePickerController,  didFinishPickingMediaWithInfo info: [String : Any]) {
         picker.dismiss(animated: true, completion: nil)
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-           shareBtn.isEnabled = true
-          imagePicker.image = image
+            imagePicker.image = image
+            shareBtn.isEnabled = true
         }
         
         picker.dismiss(animated: true)
     }
     
-    @IBAction func cancelBtn(_ sender: Any) {
+    @IBAction func cancel(_ sender: Any) {
         imagePicker.image = nil
         toptxt.text = "TOP"
-        bottemtxt.text = "BOTTEM"
+        bottemtxt.text = "BOTTOM"
     }
     
 }

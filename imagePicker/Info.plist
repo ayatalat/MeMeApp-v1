@@ -49,14 +49,6 @@
 	</array>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
-	<key>NSCameraUsageDescription
-
-camer</key>
-	<string></string>
-	<key>NSPhotoLibraryUsageDescription
-
-</key>
-	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string></string>
 </dict>
