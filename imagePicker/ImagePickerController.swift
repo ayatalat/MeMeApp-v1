@@ -29,14 +29,14 @@ UINavigationControllerDelegate,  UITextFieldDelegate{
             NSAttributedStringKey.strokeColor : UIColor.white,
             NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 18)] as [NSAttributedStringKey : Any]
         
-        textField.attributedText = NSAttributedString(string: text, attributes: memeTextAttributes) // styles not applied to the text field !!
+        textField.attributedText = NSAttributedString(string: text, attributes: memeTextAttributes)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if (imagePicker.image == nil) {
             shareBtn.isEnabled = false
-        }// if i remove the condition the share btn always disabled even if there is image and i don't know the reason
+        }
     }
     
     func subscribeToKeyboardNotifications() {
